@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   OneToOne,
   Column,
+  JoinColumn,
 } from 'typeorm';
 import { HourseList } from './HourseList';
 
@@ -31,5 +32,6 @@ export class HourseDetail {
   author: string;
 
   @OneToOne(() => HourseList, (hourseList) => hourseList.hourse_detail)
+  @JoinColumn()
   hourse_list: HourseList;
 }

@@ -5,6 +5,7 @@ import {
   Generated,
   OneToOne,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { HourseDetail } from './HouseDetail';
 import { HourseInfo } from './HourseInfo';
@@ -36,5 +37,6 @@ export class HourseList {
   hourse_detail: HourseDetail;
 
   @ManyToOne(() => HourseInfo, (hourseInfo) => hourseInfo.hourse_list)
+  @JoinColumn()
   hourse_info: HourseInfo;
 }
