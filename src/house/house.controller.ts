@@ -1,4 +1,4 @@
-import { Controller, Get, Req } from '@nestjs/common';
+import { Controller, Get, Post, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { HouseService } from './house.service';
 
@@ -14,4 +14,16 @@ export class HouseController {
 
   @Get('getDetail')
   async getDetail() {}
+
+  @Post('like')
+  async like() {}
+
+  @Post('cancelLike')
+  async cancelLike() {}
+
+  @Post('collection')
+  async collection() {}
+
+  @Post('cancelCollection')
+  async cancelCollection() {}
 }
