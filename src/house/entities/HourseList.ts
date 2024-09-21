@@ -16,6 +16,10 @@ export class HourseList {
   id: number;
 
   @Generated('uuid')
+  @Column({
+    type: 'char',
+    length: 36,
+  })
   key: string;
 
   @Column()
