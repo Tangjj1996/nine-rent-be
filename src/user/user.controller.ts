@@ -9,9 +9,14 @@ export class UserController {
   @Get('login')
   async login(@Req() request: Request) {
     const { code } = request.query;
+
     return await this.userService.wxLogin(code as string);
   }
 
   @Get('getProfile')
-  getProfile() {}
+  async getProfile(@Req() request: Request) {
+    const openid = request.header('openid');
+
+    return await this.userService.getProfile(openid);
+  }
 }

@@ -33,9 +33,17 @@ export class UserService {
       const profile = new Profile();
       profile.openid = openid;
       profile.house_info_id = 1;
+      profile.nick_name = 'mono';
+      profile.house_info_address = '上海市杨浦区';
+      profile.avatar =
+        'https://sns-avatar-qc.xhscdn.com/avatar/1040g2jo310h0v19f6k505nj20u2g91rsgq91350?imageView2/2/w/120/format/jpg|imageMogr2/strip';
       await this.profileRepository.save(profile);
     }
 
     return { openid };
+  }
+
+  async getProfile(openid: string) {
+    return await this.profileRepository.findOne({ where: { openid } });
   }
 }
