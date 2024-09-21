@@ -16,24 +16,14 @@ export class HouseInfo {
   key: string;
 
   @Column({
-    comment: '行政区划代码',
+    comment: '小区编码',
   })
   code: string;
 
   @Column({
-    comment: '行政区划的名称',
+    comment: '小区地址',
   })
-  name: string;
-
-  @Column({
-    comment: '上级行政区划的代码',
-  })
-  parent_code: string;
-
-  @Column({
-    comment: '行政区划的层级',
-  })
-  level: string;
+  address: string;
 
   @OneToMany(() => HouseList, (houseList) => houseList.house_info)
   house_list: HouseList[];

@@ -1,10 +1,18 @@
+import axios from 'axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import axios from 'axios';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Profile } from './entities/Profile';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+
+    @InjectRepository(Profile)
+    private readonly profileRepository: Repository<Profile>,
+  ) {}
 
   async wxLogin(code: string) {
     const response = await axios.get(
@@ -19,6 +27,15 @@ export class UserService {
       },
     );
     const { openid } = response.data;
+
+    const result = await this.profileRepository.find({ where: { openid } });
+    if (!result.length) {
+      const profile = new Profile();
+      profile.openid = openid;
+      profile.house_info_id = 1;
+      await this.profileRepository.save(profile);
+    }
+
     return { openid };
   }
 }
