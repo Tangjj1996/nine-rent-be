@@ -32,9 +32,6 @@ export class HourseList {
   @Column()
   author: string;
 
-  @Column()
-  isLiked: boolean;
-
   @OneToOne(() => HourseDetail, (hourseDetail) => hourseDetail.hourse_list)
   hourse_detail: HourseDetail;
 

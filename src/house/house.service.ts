@@ -10,7 +10,17 @@ export class HouseService {
     private readonly hourseListService: Repository<HourseList>,
   ) {}
 
+  /**
+   * 获取列表
+   * @param param0
+   */
   async getList({ openid }: { openid: string }) {
-    this.hourseListService.find({});
+    console.log(openid);
+    // this.hourseListService.find({});
   }
+
+  /**
+   * 根据地理位置选择最接近的小区
+   */
+  async getHouseInfo() {}
 }
