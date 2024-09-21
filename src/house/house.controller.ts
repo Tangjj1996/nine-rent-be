@@ -9,7 +9,8 @@ export class HouseController {
   @Get('getList')
   async getList(@Req() req: Request) {
     const openid = req.header('openid') as string;
-    this.houseService.getList({ openid });
+
+    return await this.houseService.getList({ openid });
   }
 
   @Get('getDetail')

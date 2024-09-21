@@ -8,12 +8,18 @@ export class HouseLiked {
   @Generated('uuid')
   key: string;
 
-  @Column()
+  @Column({
+    comment: '用户身份',
+  })
   openid: string;
 
-  @Column()
-  house_list_id: string;
+  @Column({
+    comment: '点赞的房子',
+  })
+  house_list_id: number;
 
-  @Column()
-  house_detail_id: string;
+  @Column({
+    comment: '点赞的房子详情',
+  })
+  house_detail_id: number;
 }
