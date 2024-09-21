@@ -2,20 +2,20 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HouseService } from './house.service';
 import { HouseController } from './house.controller';
-import { HourseList } from './entities/HourseList';
-import { HourseInfo } from './entities/HourseInfo';
-import { HourseCollection } from './entities/HourseCollection';
-import { HourseLiked } from './entities/HourseLiked';
-import { HourseDetail } from './entities/HouseDetail';
+import { HouseList } from './entities/HouseList';
+import { HouseInfo } from './entities/HouseInfo';
+import { HouseCollection } from './entities/HouseCollection';
+import { HouseLiked } from './entities/HouseLiked';
+import { HouseDetail } from './entities/HouseDetail';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      HourseList,
-      HourseDetail,
-      HourseInfo,
-      HourseCollection,
-      HourseLiked,
+      HouseList,
+      HouseDetail,
+      HouseInfo,
+      HouseCollection,
+      HouseLiked,
     ]),
   ],
   controllers: [HouseController],

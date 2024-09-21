@@ -5,10 +5,10 @@ import {
   OneToMany,
   Column,
 } from 'typeorm';
-import { HourseList } from './HourseList';
+import { HouseList } from './HouseList';
 
-@Entity('hourse_info')
-export class HourseInfo {
+@Entity('house_info')
+export class HouseInfo {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -35,6 +35,6 @@ export class HourseInfo {
   })
   level: string;
 
-  @OneToMany(() => HourseList, (hourseList) => hourseList.hourse_info)
-  hourse_list: HourseList[];
+  @OneToMany(() => HouseList, (houseList) => houseList.house_info)
+  house_list: HouseList[];
 }

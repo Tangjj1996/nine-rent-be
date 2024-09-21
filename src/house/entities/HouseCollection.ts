@@ -1,7 +1,7 @@
 import { Entity, Generated, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity('hourse_collection')
-export class HourseCollection {
+@Entity('house_collection')
+export class HouseCollection {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -12,8 +12,8 @@ export class HourseCollection {
   openid: string;
 
   @Column()
-  hourse_list_id: string;
+  house_list_id: string;
 
   @Column()
-  hourse_detail_id: string;
+  house_detail_id: string;
 }

@@ -6,10 +6,10 @@ import {
   Column,
   JoinColumn,
 } from 'typeorm';
-import { HourseList } from './HourseList';
+import { HouseList } from './HouseList';
 
-@Entity('hourse_detail')
-export class HourseDetail {
+@Entity('house_detail')
+export class HouseDetail {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -31,7 +31,7 @@ export class HourseDetail {
   @Column()
   author: string;
 
-  @OneToOne(() => HourseList, (hourseList) => hourseList.hourse_detail)
+  @OneToOne(() => HouseList, (houseList) => houseList.house_detail)
   @JoinColumn()
-  hourse_list: HourseList;
+  house_list: HouseList;
 }

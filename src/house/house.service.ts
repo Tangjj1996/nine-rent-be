@@ -1,22 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { HourseList } from './entities/HourseList';
+import { HouseList } from './entities/HouseList';
 
 @Injectable()
 export class HouseService {
   constructor(
-    @InjectRepository(HourseList)
-    private readonly hourseListService: Repository<HourseList>,
+    @InjectRepository(HouseList)
+    private readonly hourseListRepository: Repository<HouseList>,
   ) {}
 
   /**
    * 获取列表
    * @param param0
    */
-  async getList({ openid }: { openid: string }) {
-    console.log(openid);
-    // this.hourseListService.find({});
+  async getList({}: { openid: string }) {
+    const result = await this.hourseListRepository.find({});
+    return result;
   }
 
   /**

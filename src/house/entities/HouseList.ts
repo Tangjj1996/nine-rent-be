@@ -7,11 +7,11 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { HourseDetail } from './HouseDetail';
-import { HourseInfo } from './HourseInfo';
+import { HouseDetail } from './HouseDetail';
+import { HouseInfo } from './HouseInfo';
 
-@Entity('hourse_list')
-export class HourseList {
+@Entity('house_list')
+export class HouseList {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -37,10 +37,10 @@ export class HourseList {
   @Column()
   author: string;
 
-  @OneToOne(() => HourseDetail, (hourseDetail) => hourseDetail.hourse_list)
-  hourse_detail: HourseDetail;
+  @OneToOne(() => HouseDetail, (hourseDetail) => hourseDetail.house_list)
+  house_detail: HouseDetail;
 
-  @ManyToOne(() => HourseInfo, (hourseInfo) => hourseInfo.hourse_list)
+  @ManyToOne(() => HouseInfo, (houseInfo) => houseInfo.house_list)
   @JoinColumn()
-  hourse_info: HourseInfo;
+  house_info: HouseInfo;
 }
