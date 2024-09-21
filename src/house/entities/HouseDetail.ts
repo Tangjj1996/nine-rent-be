@@ -1,10 +1,4 @@
-import {
-  Entity,
-  Column,
-  Generated,
-  PrimaryGeneratedColumn,
-  OneToOne,
-} from 'typeorm';
+import { Entity, Generated, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 import { HourseList } from './HourseList';
 
 @Entity('hourse_detail')

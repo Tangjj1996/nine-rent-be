@@ -19,7 +19,6 @@ export class UserService {
       },
     );
     const { openid } = response.data;
-    console.log(openid, '++++', code, response);
     return { openid };
   }
 }
