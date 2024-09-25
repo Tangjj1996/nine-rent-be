@@ -10,7 +10,7 @@ async function bootstrap() {
   // 全局前缀
   app.setGlobalPrefix('api');
   // 使用全局验证管道
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   // 注册全局错误的过滤器
   app.useGlobalFilters(new HttpExceptionFilter());
   // 注册全局拦截器

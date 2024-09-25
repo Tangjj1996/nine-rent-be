@@ -15,11 +15,13 @@ export class HouseLiked {
 
   @Column({
     comment: '点赞的房子',
+    nullable: true,
   })
   house_list_id: number;
 
   @Column({
     comment: '点赞的房子详情',
+    nullable: true,
   })
   house_detail_id: number;
 }
