@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { HouseList } from './entities/HouseList';
 import { HouseLiked } from './entities/HouseLiked';
 import { ListDTO } from './dto/List';
+import { LikeDTO } from './dto/Like';
 
 @Injectable()
 export class HouseService {
@@ -43,6 +44,38 @@ export class HouseService {
       total,
       current,
       page_size,
+    };
+  }
+
+  async like({ openid, like }: { openid: string; like: LikeDTO }) {
+    const { id } = like;
+    const user = this.houseLikedRepository.create({
+      openid,
+      house_list_id: id,
+    });
+    await this.houseLikedRepository.save(user);
+    const house = await this.houseListRepository.findOne({ where: { id } });
+    house.like_count++;
+    await this.houseListRepository.save(house);
+
+    return { id };
+  }
+
+  async cancelLike({ openid, like }: { openid: string; like: LikeDTO }) {
+    const { id } = like;
+    const user = this.houseLikedRepository.create({
+      openid,
+      house_list_id: id,
+    });
+    await this.houseLikedRepository.save(user);
+    const house = await this.houseListRepository.findOne({ where: { id } });
+    if (house.like_count) {
+      house.like_count--;
+    }
+    await this.houseListRepository.save(house);
+
+    return {
+      id,
     };
   }
 
