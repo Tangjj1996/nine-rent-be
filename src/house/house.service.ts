@@ -5,6 +5,7 @@ import { House } from './entities/House';
 import { HouseLiked } from './entities/HouseLiked';
 import { ListDTO, DetailDTO } from './dto/List';
 import { LikeDTO } from './dto/Like';
+import { User } from '../user/entities/User';
 
 @Injectable()
 export class HouseService {
@@ -14,6 +15,9 @@ export class HouseService {
 
     @InjectRepository(HouseLiked)
     private readonly houseLikedRepository: Repository<HouseLiked>,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   /**
@@ -34,17 +38,29 @@ export class HouseService {
       })
     ).map(({ house_list_id }) => house_list_id);
 
-    return {
-      list: houseList.map((item) => {
-        if (houseLiked.includes(item.id)) {
-          return { ...item, is_liked: true };
-        }
-        return { ...item, is_liked: false };
-      }),
-      total,
-      current,
-      page_size,
-    };
+    const result = { total, current, page_size, list: [] };
+
+    for (const item of houseList) {
+      const { avatar, nick_name } =
+        (await this.userRepository.findOne({
+          where: { id: item.author_id },
+        })) || {};
+
+      const { id, key, cover, title, like_count } = item;
+
+      result.list.push({
+        id,
+        key,
+        cover,
+        title,
+        like_count,
+        avatar,
+        nick_name,
+        is_liked: houseLiked.includes(item.id),
+      });
+    }
+
+    return result;
   }
 
   async getDetail({ openid, id }: { openid: string } & DetailDTO) {

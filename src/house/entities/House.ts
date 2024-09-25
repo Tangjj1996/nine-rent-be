@@ -21,8 +21,11 @@ export class House {
   })
   author_id: number;
 
-  @Column({ comment: '图片地址', type: 'simple-array' })
-  covers: string[];
+  @Column({ comment: '图片地址' })
+  cover: string;
+
+  @Column({ comment: '轮播图片地址', type: 'simple-array' })
+  swiper: string[];
 
   @Column({ comment: '标题' })
   title: string;

@@ -17,6 +17,6 @@ export class UserController {
   async getProfile(@Req() request: Request) {
     const openid = request.header('openid');
 
-    return await this.userService.getProfile(openid);
+    return await this.userService.getuser(openid);
   }
 }
