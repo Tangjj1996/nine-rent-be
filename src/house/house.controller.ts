@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Query, Body, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { HouseService } from './house.service';
-import { ListDTO } from './dto/List';
+import { ListDTO, DetailDTO } from './dto/List';
 import { LikeDTO } from './dto/Like';
 
 @Controller('house')
@@ -16,7 +16,12 @@ export class HouseController {
   }
 
   @Get('getDetail')
-  async getDetail() {}
+  async getDetail(@Req() req: Request, @Query() query: DetailDTO) {
+    const openid = req.header('openid') as string;
+    const { id } = query;
+
+    return await this.houseService.getDetail({ openid, id });
+  }
 
   @Post('like')
   async like(@Req() req: Request, @Body() like: LikeDTO) {

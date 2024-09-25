@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { HouseList } from './entities/HouseList';
+import { House } from './entities/House';
 import { HouseLiked } from './entities/HouseLiked';
-import { ListDTO } from './dto/List';
+import { ListDTO, DetailDTO } from './dto/List';
 import { LikeDTO } from './dto/Like';
 
 @Injectable()
 export class HouseService {
   constructor(
-    @InjectRepository(HouseList)
-    private readonly houseListRepository: Repository<HouseList>,
+    @InjectRepository(House)
+    private readonly houseListRepository: Repository<House>,
 
     @InjectRepository(HouseLiked)
     private readonly houseLikedRepository: Repository<HouseLiked>,
@@ -47,6 +47,26 @@ export class HouseService {
     };
   }
 
+  async getDetail({ openid, id }: { openid: string } & DetailDTO) {
+    const data = await this.houseListRepository.findOne({ where: { id } });
+    const houseLiked = (
+      await this.houseLikedRepository.find({
+        where: {
+          openid,
+        },
+      })
+    ).map(({ house_list_id }) => house_list_id);
+
+    return Object.assign(data, {
+      is_liked: houseLiked.includes(data.id),
+    });
+  }
+
+  /**
+   * 点赞
+   * @param param0
+   * @returns
+   */
   async like({ openid, like }: { openid: string; like: LikeDTO }) {
     const { id } = like;
     const user = this.houseLikedRepository.create({
@@ -61,6 +81,11 @@ export class HouseService {
     return { id };
   }
 
+  /**
+   * 取消点赞
+   * @param param0
+   * @returns
+   */
   async cancelLike({ openid, like }: { openid: string; like: LikeDTO }) {
     const { id } = like;
     const user = this.houseLikedRepository.create({

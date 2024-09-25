@@ -12,8 +12,5 @@ export class HouseCollection {
   openid: string;
 
   @Column()
-  house_list_id: string;
-
-  @Column()
-  house_detail_id: string;
+  house_id: number;
 }

@@ -5,7 +5,7 @@ import {
   OneToMany,
   Column,
 } from 'typeorm';
-import { HouseList } from './HouseList';
+import { House } from './House';
 
 @Entity('house_info')
 export class HouseInfo {
@@ -25,6 +25,6 @@ export class HouseInfo {
   })
   address: string;
 
-  @OneToMany(() => HouseList, (houseList) => houseList.house_info)
-  house_list: HouseList[];
+  @OneToMany(() => House, (house) => house.house_info)
+  house: House[];
 }
