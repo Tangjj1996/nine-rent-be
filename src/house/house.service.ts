@@ -21,7 +21,6 @@ export class HouseService {
    */
   async getList({ openid, query }: { openid: string; query: ListDTO }) {
     const { current, page_size } = query;
-    console.log(typeof current);
     const [houseList, total] = await this.houseListRepository.findAndCount({
       skip: (current - 1) * page_size,
       take: page_size,
@@ -42,6 +41,8 @@ export class HouseService {
         return { ...item, is_liked: false };
       }),
       total,
+      current,
+      page_size,
     };
   }
 
