@@ -10,3 +10,9 @@ export class ListDTO {
   @Transform(({ value }) => Number(value) || undefined)
   page_size: number;
 }
+
+export class DetailDTO {
+  @IsNumber()
+  @Transform(({ value }) => Number(value) || undefined)
+  id: number;
+}

@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Generated, Column } from 'typeorm';
 
-@Entity('house_liked')
-export class HouseLiked {
+@Entity('house_extra')
+export class HouseExtra {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -9,7 +9,7 @@ export class HouseLiked {
   key: string;
 
   @Column({
-    comment: '用户身份',
+    comment: '用户id',
   })
   openid: string;
 
@@ -17,11 +17,11 @@ export class HouseLiked {
     comment: '点赞的房子',
     nullable: true,
   })
-  house_list_id: number;
+  like_house_id: number | null;
 
   @Column({
-    comment: '点赞的房子详情',
+    comment: '收藏的房子',
     nullable: true,
   })
-  house_detail_id: number;
+  collection_house_id: number | null;
 }
