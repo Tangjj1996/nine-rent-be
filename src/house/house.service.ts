@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { House } from './entities/House';
-import { HouseLiked } from './entities/HouseLiked';
+import { HouseExtra } from './entities/HouseExtra';
 import { ListDTO, DetailDTO } from './dto/List';
 import { LikeDTO } from './dto/Like';
 import { User } from '../user/entities/User';
@@ -11,10 +11,10 @@ import { User } from '../user/entities/User';
 export class HouseService {
   constructor(
     @InjectRepository(House)
-    private readonly houseListRepository: Repository<House>,
+    private readonly houseRepository: Repository<House>,
 
-    @InjectRepository(HouseLiked)
-    private readonly houseLikedRepository: Repository<HouseLiked>,
+    @InjectRepository(HouseExtra)
+    private readonly houseExtraRepository: Repository<HouseExtra>,
 
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -26,17 +26,17 @@ export class HouseService {
    */
   async getList({ openid, query }: { openid: string; query: ListDTO }) {
     const { current, page_size } = query;
-    const [houseList, total] = await this.houseListRepository.findAndCount({
+    const [houseList, total] = await this.houseRepository.findAndCount({
       skip: (current - 1) * page_size,
       take: page_size,
     });
     const houseLiked = (
-      await this.houseLikedRepository.find({
+      await this.houseExtraRepository.find({
         where: {
           openid,
         },
       })
-    ).map(({ house_list_id }) => house_list_id);
+    ).map(({ like_house_id }) => like_house_id);
 
     const result = { total, current, page_size, list: [] };
 
@@ -64,14 +64,14 @@ export class HouseService {
   }
 
   async getDetail({ openid, id }: { openid: string } & DetailDTO) {
-    const data = await this.houseListRepository.findOne({ where: { id } });
+    const data = await this.houseRepository.findOne({ where: { id } });
     const houseLiked = (
-      await this.houseLikedRepository.find({
+      await this.houseExtraRepository.find({
         where: {
           openid,
         },
       })
-    ).map(({ house_list_id }) => house_list_id);
+    ).map(({ like_house_id }) => like_house_id);
 
     return Object.assign(data, {
       is_liked: houseLiked.includes(data.id),
@@ -85,14 +85,14 @@ export class HouseService {
    */
   async like({ openid, like }: { openid: string; like: LikeDTO }) {
     const { id } = like;
-    const user = this.houseLikedRepository.create({
+    const user = this.houseExtraRepository.create({
       openid,
-      house_list_id: id,
+      like_house_id: id,
     });
-    await this.houseLikedRepository.save(user);
-    const house = await this.houseListRepository.findOne({ where: { id } });
+    await this.houseExtraRepository.save(user);
+    const house = await this.houseRepository.findOne({ where: { id } });
     house.like_count++;
-    await this.houseListRepository.save(house);
+    await this.houseRepository.save(house);
 
     return { id };
   }
@@ -104,16 +104,62 @@ export class HouseService {
    */
   async cancelLike({ openid, like }: { openid: string; like: LikeDTO }) {
     const { id } = like;
-    const user = this.houseLikedRepository.create({
+    await this.houseExtraRepository.delete({
       openid,
-      house_list_id: id,
+      like_house_id: id,
     });
-    await this.houseLikedRepository.save(user);
-    const house = await this.houseListRepository.findOne({ where: { id } });
+    const house = await this.houseRepository.findOne({ where: { id } });
     if (house.like_count) {
       house.like_count--;
     }
-    await this.houseListRepository.save(house);
+    await this.houseRepository.save(house);
+
+    return {
+      id,
+    };
+  }
+
+  /**
+   * 收藏
+   * @param param0
+   * @returns
+   */
+  async collection({
+    openid,
+    collection,
+  }: {
+    openid: string;
+    collection: LikeDTO;
+  }) {
+    const { id } = collection;
+    const user = this.houseExtraRepository.create({
+      openid,
+      collection_house_id: id,
+    });
+    await this.houseExtraRepository.save(user);
+    const house = await this.houseRepository.findOne({ where: { id } });
+    house.collection_count++;
+    await this.houseRepository.save(house);
+
+    return { id };
+  }
+
+  /**
+   * 取消点赞
+   * @param param0
+   * @returns
+   */
+  async cancelCollection({ openid, like }: { openid: string; like: LikeDTO }) {
+    const { id } = like;
+    await this.houseExtraRepository.delete({
+      openid,
+      collection_house_id: id,
+    });
+    const house = await this.houseRepository.findOne({ where: { id } });
+    if (house.collection_count) {
+      house.collection_count--;
+    }
+    await this.houseRepository.save(house);
 
     return {
       id,

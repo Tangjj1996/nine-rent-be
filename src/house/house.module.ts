@@ -5,7 +5,7 @@ import { HouseController } from './house.controller';
 import { House } from './entities/House';
 import { HouseInfo } from './entities/HouseInfo';
 import { HouseCollection } from './entities/HouseCollection';
-import { HouseLiked } from './entities/HouseLiked';
+import { HouseExtra } from './entities/HouseExtra';
 import { User } from '../user/entities/User';
 
 @Module({
@@ -14,7 +14,7 @@ import { User } from '../user/entities/User';
       House,
       HouseInfo,
       HouseCollection,
-      HouseLiked,
+      HouseExtra,
       User,
     ]),
   ],
