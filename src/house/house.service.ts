@@ -20,14 +20,110 @@ export class HouseService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  async getListByLike({ openid, query }: { openid: string; query: ListDTO }) {
+    const { current, page_size } = query;
+    const skip = (current - 1) * page_size;
+
+    const [houseList, total] = await this.houseRepository
+      .createQueryBuilder('house')
+      .leftJoin(
+        HouseExtra,
+        'house_extra',
+        'house_extra.like_house_id = house.id',
+      )
+      .where('house_extra.openid = :openid', { openid })
+      .skip(skip)
+      .take(page_size)
+      .getManyAndCount();
+
+    const result = { total, current, page_size, list: [] };
+
+    for (const item of houseList) {
+      const { avatar, nick_name } =
+        (await this.userRepository.findOne({
+          where: { id: item.author_id },
+        })) || {};
+
+      const { id, key, cover, title, like_count } = item;
+
+      result.list.push({
+        id,
+        key,
+        cover,
+        title,
+        like_count,
+        avatar,
+        nick_name,
+        is_liked: true,
+      });
+    }
+
+    return result;
+  }
+
+  async getListByCollection({
+    openid,
+    query,
+  }: {
+    openid: string;
+    query: ListDTO;
+  }) {
+    const { current, page_size } = query;
+    const skip = (current - 1) * page_size;
+
+    const [houseList, total] = await this.houseRepository
+      .createQueryBuilder('house')
+      .leftJoin(
+        HouseExtra,
+        'house_extra',
+        'house_extra.collection_house_id = house.id',
+      )
+      .where('house_extra.openid = :openid', { openid })
+      .skip(skip)
+      .take(page_size)
+      .getManyAndCount();
+
+    const result = { total, current, page_size, list: [] };
+    const houseLiked = (
+      await this.houseExtraRepository.find({
+        where: {
+          openid,
+        },
+      })
+    ).map(({ like_house_id }) => like_house_id);
+
+    for (const item of houseList) {
+      const { avatar, nick_name } =
+        (await this.userRepository.findOne({
+          where: { id: item.author_id },
+        })) || {};
+
+      const { id, key, cover, title, like_count } = item;
+
+      result.list.push({
+        id,
+        key,
+        cover,
+        title,
+        like_count,
+        avatar,
+        nick_name,
+        is_liked: houseLiked.includes(item.id),
+      });
+    }
+
+    return result;
+  }
+
   /**
    * 获取列表
    * @param param0
    */
   async getList({ openid, query }: { openid: string; query: ListDTO }) {
     const { current, page_size } = query;
+    const skip = (current - 1) * page_size;
     const [houseList, total] = await this.houseRepository.findAndCount({
-      skip: (current - 1) * page_size,
+      skip,
       take: page_size,
     });
     const houseLiked = (
