@@ -65,16 +65,21 @@ export class HouseService {
 
   async getDetail({ openid, id }: { openid: string } & DetailDTO) {
     const data = await this.houseRepository.findOne({ where: { id } });
-    const houseLiked = (
-      await this.houseExtraRepository.find({
-        where: {
-          openid,
-        },
-      })
-    ).map(({ like_house_id }) => like_house_id);
+    const houseExtra = await this.houseExtraRepository.find({
+      where: {
+        openid,
+      },
+    });
+    const houseLiked = houseExtra
+      .map(({ like_house_id }) => like_house_id)
+      .filter(Boolean);
+    const houseCollection = houseExtra
+      .map(({ collection_house_id }) => collection_house_id)
+      .filter(Boolean);
 
     return Object.assign(data, {
       is_liked: houseLiked.includes(data.id),
+      is_collection: houseCollection.includes(data.id),
     });
   }
 
@@ -145,12 +150,18 @@ export class HouseService {
   }
 
   /**
-   * 取消点赞
+   * 取消收藏
    * @param param0
    * @returns
    */
-  async cancelCollection({ openid, like }: { openid: string; like: LikeDTO }) {
-    const { id } = like;
+  async cancelCollection({
+    openid,
+    collection,
+  }: {
+    openid: string;
+    collection: LikeDTO;
+  }) {
+    const { id } = collection;
     await this.houseExtraRepository.delete({
       openid,
       collection_house_id: id,

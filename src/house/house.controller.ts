@@ -38,8 +38,16 @@ export class HouseController {
   }
 
   @Post('collection')
-  async collection() {}
+  async collection(@Req() req: Request, @Body() collection: LikeDTO) {
+    const openid = req.header('openid') as string;
+
+    return await this.houseService.collection({ openid, collection });
+  }
 
   @Post('cancelCollection')
-  async cancelCollection() {}
+  async cancelCollection(@Req() req: Request, @Body() collection: LikeDTO) {
+    const openid = req.header('openid') as string;
+
+    return await this.houseService.cancelCollection({ openid, collection });
+  }
 }
