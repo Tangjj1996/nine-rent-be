@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Query, Body, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { HouseService } from './house.service';
-import { ListDTO, DetailDTO } from './dto/List';
+import { ListDTO, DetailDTO, HouseType } from './dto/List';
 import { LikeDTO } from './dto/Like';
 
 @Controller('house')
@@ -11,6 +11,14 @@ export class HouseController {
   @Get('getList')
   async getList(@Req() req: Request, @Query() query: ListDTO) {
     const openid = req.header('openid') as string;
+
+    if (query.type === HouseType.like) {
+      return await this.houseService.getListByLike({ openid, query });
+    }
+
+    if (query.type === HouseType.collection) {
+      return await this.houseService.getListByCollection({ openid, query });
+    }
 
     return await this.houseService.getList({ openid, query });
   }
